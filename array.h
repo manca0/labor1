@@ -1,5 +1,4 @@
-#ifndef ARRAY_H
-#define ARRAY_H
+#pragma once
 
 #define DEFAULT 3
 #include "magazines.h"
@@ -27,4 +26,3 @@ private:
 };
 
 
-#endif

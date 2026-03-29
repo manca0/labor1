@@ -1,5 +1,4 @@
-#ifndef MAGAZINES_H
-#define MAGAZINES_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -38,4 +37,3 @@ std::ostream& operator <<(std::ostream &os, const Magazines &magazine);
 
 
 
-#endif

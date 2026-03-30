@@ -16,7 +16,7 @@ namespace database{
         }
     }
     
-    void dwrite(Array *arr, std::string filename){
+    int dwrite(Array *arr, std::string filename){
         std::ofstream fout(filename);
     
         for(size_t i = 0; i< arr->get_size(); i++){
@@ -24,6 +24,7 @@ namespace database{
         }
     
         fout.close();
+        return 0;
     }
     
     int dread(Array *arr, std::string filename){

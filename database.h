@@ -6,7 +6,7 @@
 
 namespace database {
     void print_magazines(Array *arr);
-    void dwrite(Array *arr, std::string filename);
+    int dwrite(Array *arr, std::string filename);
     int dread(Array *arr, std::string filename);
     void add_to_db(Array *arr, std::string filename, Magazines *mag);
     void change_name(Array *arr, std::string filename, int index, std::string u_name_mag);

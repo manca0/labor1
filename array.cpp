@@ -6,12 +6,12 @@
 
 Array::Array() : size(0), capacity(DEFAULT), arr(new Magazines*[DEFAULT]){}
 Array::~Array(){
-    size = 0;
     capacity = 0;
     for(size_t i = 0; i < this->size; i++){
         delete this->arr[i]; 
     }
-    delete[] arr; 
+    delete[] arr;
+    size = 0; 
     arr = nullptr;
 }
 

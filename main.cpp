@@ -48,7 +48,7 @@ int main(){
                 database::print_magazines(&arr);
                 break;
             
-            case 2:
+            case 2:{
                 std::cout << "\n--- ADD NEW MAGAZINE ---\n";
                 std::cout << "Enter magazine name: ";
                 std::cin >> temp_name;      
@@ -57,13 +57,15 @@ int main(){
                 std::cout << "Enter magazine sales: ";
                 std::cin >> temp_sales;
 
-                temp_mag.set_sales(temp_sales);
-                temp_mag.set_name(temp_name);
-                temp_mag.set_theme(temp_theme);
-                database::add_to_db(&arr, filename, &temp_mag);
+                Magazines* new_mag = new Magazines();
+
+                new_mag->set_sales(temp_sales);
+                new_mag->set_name(temp_name);
+                new_mag->set_theme(temp_theme);
+                database::add_to_db(&arr, filename, new_mag);
                 std::cout << "Magazine added successfully!\n";
                 break;
-
+            }
             case 3:
                 std::cout << "\n--- SEARCH BY NAME ---\n";
                 std::cout << "Enter name to search: ";

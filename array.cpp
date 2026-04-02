@@ -16,6 +16,7 @@ Array::~Array(){
 }
 
 void Array::arr_realloc(){
+
     int new_capacity = this->capacity*2;
     Magazines **newArr = (Magazines**)realloc(this->arr, new_capacity* sizeof(Magazines*));
 
@@ -45,6 +46,6 @@ int Array::get_size(){
     return this->size;
 }
 
-Magazines* Array::get_element(int index){
-    return this->arr[index];
+Magazines &Array::operator [](size_t index){
+    return *(this->arr[index]);
 }

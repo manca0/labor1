@@ -12,7 +12,6 @@ int main(){
     std::string temp_name;
     std::string temp_theme;
     std::string search_term;
-    Magazines temp_mag;
     int temp_index;
     int temp_sales;
     int press_button = 0;
@@ -88,7 +87,7 @@ int main(){
                 
                 std::cout << "\n--- EDIT MAGAZINE ---\n";
                 std::cout << "Current database size: " << arr.get_size() << " magazines\n";
-                std::cout << "Enter magazine index (0-" << arr.get_size() << "): ";
+                std::cout << "Enter magazine index (0-" << (arr.get_size() - 1) << "): ";
                 std::cin >> temp_index;
 
 
@@ -116,13 +115,13 @@ int main(){
                         std::cout << "Enter new theme: ";
                         std::cin >> temp_theme;
                         database::change_theme(&arr,filename,temp_index, temp_theme);
-                        std::cout << "Name updated!\n";
+                        std::cout << "theme updated!\n";
                         break;
                     case 3:
-                        std::cout << "Enter new name: ";
+                        std::cout << "Enter new sales: ";
                         std::cin >> temp_sales;
                         database::change_sales(&arr,filename,temp_index, temp_sales);
-                        std::cout << "Name updated!\n";
+                        std::cout << "sales updated!\n";
                         break;
 
                     default:
@@ -147,9 +146,9 @@ int main(){
                 }
 
                 std::cout << "Deleting magazine:\n";
-                std::cout << "\nName: " << arr.get_element(temp_index)->get_name() << "\n";
-                std::cout << "\nTheme: " << arr.get_element(temp_index)->get_theme() << "\n";
-                std::cout << "\nSales: " << arr.get_element(temp_index)->get_sales() << "\n";
+                std::cout << "\nName: " << arr[temp_index].get_name() << "\n";
+                std::cout << "\nTheme: " << arr[temp_index].get_theme() << "\n";
+                std::cout << "\nSales: " << arr[temp_index].get_sales() << "\n";
 
                 std::cout << "Are you sure? (1=Yes, 0=No): ";
                 int confirm;

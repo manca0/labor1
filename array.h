@@ -12,8 +12,8 @@ public:
     void arr_pushback(Magazines *value);
     void arr_del(int index);
     int get_size();
-    Magazines* get_element(int index);
-
+    //Magazines* get_element(int index);
+    Magazines &operator [](size_t index);
 
     ~Array();
 private:

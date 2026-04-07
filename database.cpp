@@ -1,98 +1,112 @@
 #include "database.h"
-#include "array.h"
-#include "magazines.h"
 #include <iostream>
 #include <fstream>
 
-namespace database{
+Database::Database(const std::string& filename) : filename(filename) {
+    load();
+}
 
-    void print_magazines(Array *arr){
-        std::cout << "\n=== MAGAZINES DATABASE ===\n";
-        std::cout << "Total magazines: " << arr->get_size() << "\n\n";
-        for(size_t i = 0; i < arr->get_size(); i++){
-            std::cout << "Magazine " << i << ":\n";
-            std::cout << (*arr)[i];
-            std::cout << "----------------------------\n";
-        }
+Database::~Database() = default;
+
+void Database::load() {
+    std::ifstream fin(filename);
+    if (!fin.is_open()) return;
+    
+    Magazines temp;
+    while (fin >> temp) {
+        magazines.arr_pushback(new Magazines(temp));
     }
-    
-    int dwrite(Array *arr, std::string filename){
-        std::ofstream fout(filename);
-    
-        for(size_t i = 0; i< arr->get_size(); i++){
-            fout << (*arr)[i];
-        }
-    
-        fout.close();
-        return 0;
+    fin.close();
+}
+
+void Database::save() const {
+    std::ofstream fout(filename);
+    for (size_t i = 0; i < magazines.get_size(); ++i) {
+        fout << magazines[i];
     }
-    
-    int dread(Array *arr, std::string filename){
-        std::ifstream fin(filename);
-    
-        for(size_t i = 0; i < arr->get_size(); i++){
-            fin >> (*arr)[i];
-        }
-    
-        fin.close();
-        return 0;
+    fout.close();
+}
+
+void Database::print() const {
+    std::cout << "\n=== MAGAZINES DATABASE ===\n";
+    std::cout << "Total magazines: " << magazines.get_size() << "\n\n";
+    for (size_t i = 0; i < magazines.get_size(); ++i) {
+        std::cout << "Magazine " << i << ":\n";
+        std::cout << magazines[i];
+        std::cout << "----------------------------\n";
     }
-    
-    
-    void add_to_db(Array *arr, std::string filename, Magazines *mag){
-        arr->arr_pushback(mag);
-        dwrite(arr, filename);
-    
-    }
-    void change_name(Array *arr, std::string filename, int index, std::string u_name_mag){
-        (*arr)[index].set_name(u_name_mag);
-        dwrite(arr, filename);
-    }
-    void change_theme(Array *arr, std::string filename, int index, std::string u_theme_mag){
-        (*arr)[index].set_theme(u_theme_mag);
-        dwrite(arr, filename);
-    }
-    void change_sales(Array *arr, std::string filename, int index, int u_sales_mag){
-        (*arr)[index].set_sales(u_sales_mag);
-        dwrite(arr, filename);
-    }
-    
-    void delete_element(Array *arr, std::string filename, int index){
-        arr->arr_del(index);
-        dwrite(arr, filename);
+}
+
+void Database::add(const Magazines& magazine) {
+    magazines.arr_pushback(new Magazines(magazine));
+    save();
+}
+
+void Database::remove(size_t index) {
+    if (index < magazines.get_size()) {
+        magazines.arr_del(index);
+        save();
         std::cout << "Element at index " << index << " deleted successfully!\n";
     }
-    
-    void search_by_name(Array *arr, std::string u_name){
-        std::cout << "\n=== SEARCH RESULTS BY NAME: " << u_name << " ===\n";
-        int found;
-        for(size_t i = 0; i < arr->get_size(); i++){
-            if((*arr)[i].get_name() == u_name){
-                std::cout << "Found at index " << i << ":\n";
-                std::cout << (*arr)[i];
-                std::cout << "----------------------------\n";
-                found = 1;
-            }
-        }
+}
 
-        if(!found){
-            std::cout << "No magazines found with name " << u_name << "\n";
+void Database::changeName(size_t index, const std::string& newName) {
+    if (index < magazines.get_size()) {
+        magazines[index].set_name(newName);
+        save();
+    }
+}
+
+void Database::changeTheme(size_t index, const std::string& newTheme) {
+    if (index < magazines.get_size()) {
+        magazines[index].set_theme(newTheme);
+        save();
+    }
+}
+
+void Database::changeSales(size_t index, int newSales) {
+    if (index < magazines.get_size()) {
+        magazines[index].set_sales(newSales);
+        save();
+    }
+}
+
+void Database::searchByName(const std::string& name) const {
+    std::cout << "\n=== SEARCH RESULTS BY NAME: " << name << " ===\n";
+    bool found = false;
+    for (size_t i = 0; i < magazines.get_size(); ++i) {
+        if (magazines[i].get_name() == name) {
+            std::cout << "Found at index " << i << ":\n";
+            std::cout << magazines[i];
+            std::cout << "----------------------------\n";
+            found = true;
         }
     }
-    void search_by_theme(Array *arr, std::string u_theme){
-        std::cout << "\n=== SEARCH RESULTS BY THEME: " << u_theme << " ===\n";
-        int found;
-        for(size_t i = 0; i < arr->get_size(); i++){
-            if((*arr)[i].get_theme() == u_theme){
-                std::cout << "Found at index " << i << ":\n";
-                std::cout << (*arr)[i];
-                std::cout << "----------------------------\n";
-                found = 1;
-            }
-        }
+    if (!found) {
+        std::cout << "No magazines found with name " << name << "\n";
+    }
+}
 
-        if(!found){
-            std::cout << "No magazines found with theme " << u_theme << "\n";
+void Database::searchByTheme(const std::string& theme) const {
+    std::cout << "\n=== SEARCH RESULTS BY THEME: " << theme << " ===\n";
+    bool found = false;
+    for (size_t i = 0; i < magazines.get_size(); ++i) {
+        if (magazines[i].get_theme() == theme) {
+            std::cout << "Found at index " << i << ":\n";
+            std::cout << magazines[i];
+            std::cout << "----------------------------\n";
+            found = true;
         }
     }
+    if (!found) {
+        std::cout << "No magazines found with theme " << theme << "\n";
+    }
+}
+
+size_t Database::getSize() const {
+    return magazines.get_size();
+}
+
+const Magazines& Database::operator[](size_t index) const {
+    return magazines[index];
 }

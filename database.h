@@ -2,25 +2,31 @@
 
 #include "array.h"
 #include "magazines.h"
-#include <iostream>
+#include <string>
 
-namespace database {
-    void print_magazines(Array *arr);
-    int dwrite(Array *arr, std::string filename);
-    int dread(Array *arr, std::string filename);
-    void add_to_db(Array *arr, std::string filename, Magazines *mag);
-    void change_name(Array *arr, std::string filename, int index, std::string u_name_mag);
-    void change_theme(Array *arr, std::string filename, int index, std::string u_theme_mag);
-    void change_sales(Array *arr, std::string filename, int index, int u_sales_mag);
-
-    void delete_element(Array *arr, std::string filename, int index);
-
-    void search_by_name(Array *arr, std::string u_name);
-    void search_by_theme(Array *arr, std::string u_theme);
-
-
-}
-
-
-
-
+class Database {
+public:
+    Database(const std::string& filename);
+    ~Database();
+    
+    void load();
+    void save() const;
+    
+    void print() const;
+    void add(const Magazines& magazine);
+    void remove(size_t index);
+    
+    void changeName(size_t index, const std::string& newName);
+    void changeTheme(size_t index, const std::string& newTheme);
+    void changeSales(size_t index, int newSales);
+    
+    void searchByName(const std::string& name) const;
+    void searchByTheme(const std::string& theme) const;
+    
+    size_t getSize() const;
+    const Magazines& operator[](size_t index) const;
+    
+private:
+    std::string filename;
+    Array magazines;
+};

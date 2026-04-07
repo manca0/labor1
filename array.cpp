@@ -1,51 +1,65 @@
 #include "array.h"
 #include "magazines.h"
-#include <cstddef>
-#include <cstdlib>
 
+Array::Array() : size(0), capacity(DEFAULT), arr(new Magazines*[DEFAULT]) {
+    for(size_t i = 0; i < capacity; ++i) {
+        arr[i] = nullptr;
+    }
+}
 
-Array::Array() : size(0), capacity(DEFAULT), arr(new Magazines*[DEFAULT]){}
 Array::~Array(){
-    capacity = 0;
-    for(size_t i = 0; i < this->size; i++){
-        delete this->arr[i]; 
+    for(size_t i = 0; i < size; ++i){
+        delete arr[i];
     }
     delete[] arr;
-    size = 0; 
+    size = 0;
+    capacity = 0;
     arr = nullptr;
 }
 
 void Array::arr_realloc(){
-
-    int new_capacity = this->capacity*2;
-    Magazines **newArr = (Magazines**)realloc(this->arr, new_capacity* sizeof(Magazines*));
-
-    this->capacity = new_capacity;
-    this->arr = newArr;
+    size_t new_capacity = capacity * 2;
+    Magazines** newArr = new Magazines*[new_capacity];
+    
+    for(size_t i = 0; i < size; ++i) {
+        newArr[i] = arr[i];
+    }
+    
+    for(size_t i = size; i < new_capacity; ++i) {
+        newArr[i] = nullptr;
+    }
+    
+    delete[] arr;
+    arr = newArr;
+    capacity = new_capacity;
 }
 
-
-void Array::arr_pushback(Magazines *value){
-    if(this->size >= this->capacity){
+void Array::arr_pushback(Magazines* value){
+    if(size >= capacity){
         arr_realloc();
     }
-
-    this->arr[this->size] = value;
-    this->size++;
+    arr[size++] = value;
 }
 
-void Array::arr_del(int index){
-    for(size_t i = index; i < this->size-1; i++){
-        this->arr[i] = this->arr[i+1];
+void Array::arr_del(size_t index){
+    if(index >= size) return;
+    
+    delete arr[index];
+    
+    for(size_t i = index; i < size - 1; ++i){
+        arr[i] = arr[i+1];
     }
-    this->size--;
+    size--;
 }
 
-
-int Array::get_size(){
-    return this->size;
+size_t Array::get_size() const {
+    return size;
 }
 
-Magazines &Array::operator [](size_t index){
-    return *(this->arr[index]);
+Magazines& Array::operator [](size_t index){
+    return *(arr[index]);
+}
+
+const Magazines& Array::operator [](size_t index) const {
+    return *(arr[index]);
 }

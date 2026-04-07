@@ -1,28 +1,23 @@
 #pragma once
-
 #define DEFAULT 3
 #include "magazines.h"
-
-
 
 class Array{
 public:
     Array();
-
-    void arr_pushback(Magazines *value);
-    void arr_del(int index);
-    int get_size();
-    //Magazines* get_element(int index);
-    Magazines &operator [](size_t index);
-
     ~Array();
+    
+    void arr_pushback(Magazines* value);
+    void arr_del(size_t index);
+    size_t get_size() const;
+    
+    Magazines& operator [](size_t index);
+    const Magazines& operator [](size_t index) const;
+    
 private:
-    int size;
-    int capacity;
-    Magazines **arr;
-
+    size_t size;
+    size_t capacity;
+    Magazines** arr;
+    
     void arr_realloc();
-
 };
-
-
